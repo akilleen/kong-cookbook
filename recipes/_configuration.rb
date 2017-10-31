@@ -39,6 +39,8 @@ if Gem::Version.new(node['kong']['version']) >= Gem::Version.new('0.9.0')
     variables(
       config: node['kong']['kong.conf']
     )
+    notifies :run, 'ruby_block[wait for cassandra]' if recipe.manage_cassandra
+    notifies :restart, 'service[kong]'
   end
 else
   if manage_ssl_certificate
